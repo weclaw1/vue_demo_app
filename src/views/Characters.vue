@@ -37,23 +37,21 @@
                   </div>
                 </td>
                 <td>
-                  <div class="control">
-                    <input v-model="newCharacter.level" class="input" type="password" placeholder="Password">
-                  </div>
                 </td>
                 <td>
                   <div class="control">
-                    <input v-model="newUser.email" class="input" v-bind:disabled="!auth.isAdmin" type="email" placeholder="Email">
+                    <div class="select">
+                      <select v-model="newCharacter.characterClass">
+                        <option v-for="characterClass in CharacterClass" v-bind:key="characterClass">{{ CharacterClass[characterClass] }}</option>
+                      </select>
+                    </div>
                   </div>
                 </td>
                 <td>
-                  <div class="control">
-                    <label class="checkbox"><input v-model="newUser.admin" v-bind:disabled="!auth.isAdmin" type="checkbox"></label>
-                  </div>
                 </td>
                 <td>
                   <div class="control">
-                    <button v-on:click.prevent="addUser" class="button" v-bind:disabled="!auth.isAdmin">+</button>
+                    <button v-on:click.prevent="addCharacter" class="button">+</button>
                   </div>
                 </td>
               </tr>
