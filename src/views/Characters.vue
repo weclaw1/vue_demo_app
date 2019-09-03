@@ -65,8 +65,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserRepository } from '../repositories/UserRepository';
-import { User } from '../entities/User';
+import { GameCharacterRepository } from '../repositories/GameCharacterRepository';
+import { GameCharacter, CharacterClass } from '../entities/GameCharacter';
 import { getModule } from 'vuex-module-decorators';
 import { VueLoading } from 'vue-loading-template';
 import Auth from '../store/Auth';
@@ -78,7 +78,7 @@ import Auth from '../store/Auth';
 })
 
 export default class Users extends Vue {
-  private newUser: User = new User(undefined, '', '', '', false);
+  private newCharacter: GameCharacter = new GameCharacter(undefined, '', 0, CharacterClass:);
   private users: User[] = [];
   private loading: boolean = true;
   private userRepository: UserRepository = new UserRepository();
