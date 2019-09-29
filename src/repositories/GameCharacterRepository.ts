@@ -5,7 +5,7 @@ import { getModule } from 'vuex-module-decorators';
 import Auth from '../store/Auth';
 
 export class GameCharacterRepository implements Repository<GameCharacter> {
-    private readonly resource: string; 
+    private readonly resource: string;
     private auth: Auth = getModule(Auth);
 
     constructor(private readonly userId: number) {

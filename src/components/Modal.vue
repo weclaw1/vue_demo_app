@@ -7,6 +7,9 @@
         <button v-on:click="$emit('close')" class="delete" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
+        <notification class="is-danger" v-if="error" v-on:close="handleErrorClose">
+          {{error}}
+        </notification>
         <slot>
         </slot>
       </section>
@@ -20,9 +23,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Notification from './Notification.vue';
 
 @Component({
   components: {
+    Notification,
   },
 })
 export default class Modal extends Vue {
@@ -34,5 +39,29 @@ export default class Modal extends Vue {
 
   @Prop({default: 'Cancel'})
   private cancelBtnText!: string;
+
+  @Prop()
+  private error!: string;
+
+  private handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.$emit('save');
+    }
+    if (event.key === 'Escape') {
+      this.$emit('close');
+    }
+  }
+
+  private created() {
+    window.addEventListener('keydown', this.handleKeydown);
+  }
+
+  private destroyed() {
+    window.removeEventListener('keydown', this.handleKeydown);
+  }
+
+  private handleErrorClose() {
+    this.$emit('handleErrorClose');
+  }
 }
 </script>

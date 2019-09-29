@@ -10,7 +10,7 @@
         <div class="navbar-start">
           <router-link class="navbar-item" to="/">Home</router-link>
           <router-link class="navbar-item" to="/users">Users</router-link>
-          <router-link class="navbar-item" to="/characters">Characters</router-link>
+          <router-link class="navbar-item" to="/characters" v-if="auth.isLoggedIn">Characters</router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
@@ -27,9 +27,12 @@
         </div>
       </div>
     </nav>
+    <notification class="is-danger" v-if="error" v-on:close="handleErrorClose">
+      {{error}}
+    </notification>
     <sign-up v-if="showSignUp" v-on:close="handleSignUpClose"></sign-up>
     <login v-if="showLogin" v-on:close="handleLoginClose"></login>
-    <router-view/>
+    <router-view v-on:displayError="displayError"/>
   </div>
 </template>
 
@@ -39,14 +42,17 @@ import { getModule } from 'vuex-module-decorators';
 import SignUp from './components/SignUp.vue';
 import Login from './components/Login.vue';
 import Auth from './store/Auth';
+import Notification from './components/Notification.vue';
 
 @Component({
   components: {
     SignUp,
     Login,
+    Notification,
   },
 })
 export default class App extends Vue {
+  private error: string = '';
   private showSignUp: boolean = false;
   private showLogin: boolean = false;
   private auth: Auth = getModule(Auth);
@@ -57,6 +63,14 @@ export default class App extends Vue {
 
   public handleSignUpClose() {
     this.showSignUp = false;
+  }
+
+  public displayError(error: string) {
+    this.error = error;
+  }
+
+  public handleErrorClose() {
+    this.error = '';
   }
 }
 

@@ -20,9 +20,7 @@
                 <td>{{user.admin}}</td>
                 <td>                  
                   <div class="control">
-                    <form v-on:submit.prevent="deleteUser(user.id)">
-                      <button v-on:click.prevent="deleteUser(user.id)" class="button" v-bind:disabled="!auth.isAdmin">-</button>
-                    </form>
+                    <button v-on:click.prevent="deleteUser(user.id)" class="button" v-bind:disabled="!auth.isAdmin"><i class="fas fa-minus-square"></i></button>
                   </div>
                 </td>
               </tr>
@@ -53,7 +51,7 @@
                 </td>
                 <td>
                   <div class="control">
-                    <button v-on:click.prevent="addUser" class="button" v-bind:disabled="!auth.isAdmin">+</button>
+                    <button v-on:click.prevent="addUser" class="button" v-bind:disabled="!auth.isAdmin"><i class="fas fa-plus-square"></i></button>
                   </div>
                 </td>
               </tr>
@@ -92,7 +90,7 @@ export default class Users extends Vue {
       this.loadUsers();
     })
     .catch((error) => {
-      console.log(error);
+      this.$emit('displayError', 'Error while adding new user: ' + error);
     });
   }
 
@@ -101,7 +99,7 @@ export default class Users extends Vue {
       this.loadUsers();
     })
     .catch((error) => {
-      console.log(error);
+      this.$emit('displayError', 'Error while removing user: ' + error);
     });
   }
 
@@ -116,7 +114,7 @@ export default class Users extends Vue {
     })
     .catch((error) => {
       this.loading = false;
-      console.log(error);
+      this.$emit('displayError', 'Error while loading users: ' + error);
     });
   }
 

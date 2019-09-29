@@ -22,7 +22,7 @@ export default class Auth extends VuexModule {
   get isAdmin(): boolean {
     if (this._token === undefined) {
       return false;
-    } 
+    }
     return this._token.admin;
   }
 

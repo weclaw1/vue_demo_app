@@ -2,29 +2,29 @@
   <modal 
     v-on:save="handleSubmit"
     v-on:close="handleClose"
+    v-on:handleErrorClose="handleErrorClose"
     title="Login"
     saveBtnText="Login"
+    v-bind:error="error"
   >
-    <form v-on:submit.prevent="handleSubmit">
-      <div class="field">
-        <label class="label">Username</label>
-        <div class="control has-icons-left">
-          <input v-model="username" class="input" type="text" placeholder="Username">
-          <span class="icon is-small is-left">
-            <i class="fas fa-user"></i>
-          </span>
-        </div>
+    <div class="field">
+      <label class="label">Username</label>
+      <div class="control has-icons-left">
+        <input v-model="username" class="input" type="text" placeholder="Username">
+        <span class="icon is-small is-left">
+          <i class="fas fa-user"></i>
+        </span>
       </div>
+    </div>
 
-      <div class="field">
-        <div class="control has-icons-left">
-          <input v-model="password" class="input" type="password" placeholder="Password">
-          <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
-          </span>
-        </div>
+    <div class="field">
+      <div class="control has-icons-left">
+        <input v-model="password" class="input" type="password" placeholder="Password">
+        <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
       </div>
-    </form>
+    </div>
   </modal>
 </template>
 
@@ -43,6 +43,7 @@ export default class Login extends Vue {
   private username: string = '';
   private password: string = '';
   private auth: Auth = getModule(Auth);
+  private error: string = '';
 
   public handleSubmit() {
     const username = this.username;
@@ -51,12 +52,16 @@ export default class Login extends Vue {
       this.handleClose();
     })
     .catch((error) => {
-      console.log(error);
+      this.error = 'Error while logging in: ' + error;
     });
   }
 
   public handleClose() {
     this.$emit('close');
+  }
+
+  public handleErrorClose() {
+    this.error = '';
   }
 }
 </script>

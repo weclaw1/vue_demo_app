@@ -1,8 +1,8 @@
 export enum CharacterClass {
-    Knight = "Knight",
-    Paladin = "Paladin",
-    Mage = "Mage",
-    Druid = "Druid",
+    Knight = 'Knight',
+    Paladin = 'Paladin',
+    Mage = 'Mage',
+    Druid = 'Druid',
 }
 
 export class GameCharacter {

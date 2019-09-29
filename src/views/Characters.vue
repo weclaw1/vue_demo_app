@@ -21,7 +21,7 @@
                 <td>                  
                   <div class="control">
                     <form v-on:submit.prevent="deleteCharacter(character.id)">
-                      <button v-on:click.prevent="deleteCharacter(character.id)" class="button">-</button>
+                      <button v-on:click.prevent="deleteCharacter(character.id)" class="button"><i class="fas fa-minus-square"></i></button>
                     </form>
                   </div>
                 </td>
@@ -42,7 +42,7 @@
                   <div class="control">
                     <div class="select">
                       <select v-model="newCharacter.characterClass">
-                        <option v-for="characterClass in CharacterClass" v-bind:key="characterClass">{{ CharacterClass[characterClass] }}</option>
+                        <option v-for="characterClass in characterClasses" v-bind:key="characterClass">{{ characterClass }}</option>
                       </select>
                     </div>
                   </div>
@@ -51,7 +51,7 @@
                 </td>
                 <td>
                   <div class="control">
-                    <button v-on:click.prevent="addCharacter" class="button">+</button>
+                    <button v-on:click.prevent="addCharacter" class="button"><i class="fas fa-plus-square"></i></button>
                   </div>
                 </td>
               </tr>
@@ -71,6 +71,7 @@ import { getModule } from 'vuex-module-decorators';
 import { VueLoading } from 'vue-loading-template';
 import Auth from '../store/Auth';
 
+
 @Component({
   components: {
     VueLoading,
@@ -78,45 +79,46 @@ import Auth from '../store/Auth';
 })
 
 export default class Users extends Vue {
-  private newCharacter: GameCharacter = new GameCharacter(undefined, '', 0, CharacterClass:);
-  private users: User[] = [];
+  private newCharacter: GameCharacter = new GameCharacter(undefined, '', 0, CharacterClass.Knight);
+  private characters: GameCharacter[] = [];
   private loading: boolean = true;
-  private userRepository: UserRepository = new UserRepository();
   private auth: Auth = getModule(Auth);
+  private characterClasses: string[] = Object.keys(CharacterClass);
+  private characterRepository: GameCharacterRepository = new GameCharacterRepository(this.auth.token ?
+                                                                                     this.auth.token.id : 0);
 
-  public addUser() {
-    this.userRepository.post(this.newUser).then((response) => {
-      this.newUser = new User(undefined, '', '', '', false);
-      this.loadUsers();
+  public addCharacter() {
+    this.characterRepository.post(this.newCharacter).then((response) => {
+      this.newCharacter = new GameCharacter(undefined, '', 0, CharacterClass.Knight);
+      this.loadCharacters();
     })
     .catch((error) => {
-      console.log(error);
+      this.$emit('displayError', 'Error while adding new character: ' + error);
     });
   }
 
-  public deleteUser(id: number) {
-    this.userRepository.delete(id).then((response) => {
-      this.loadUsers();
+  public deleteCharacter(id: number) {
+    this.characterRepository.delete(id).then((response) => {
+      this.loadCharacters();
     })
     .catch((error) => {
-      console.log(error);
+      this.$emit('displayError', 'Error while removing game character: ' + error);
     });
   }
 
   private created() {
-    this.loadUsers();
+    this.loadCharacters();
   }
 
-  private loadUsers() {
-    this.userRepository.getAll().then((response) => {
+  private loadCharacters() {
+    this.characterRepository.getAll().then((response) => {
       this.loading = false;
-      this.users = response;
+      this.characters = response;
     })
     .catch((error) => {
       this.loading = false;
-      console.log(error);
+      this.$emit('displayError', 'Error while loading game characters: ' + error);
     });
   }
-
 }
 </script>
